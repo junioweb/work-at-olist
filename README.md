@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/junioweb/work-at-olist.svg?style=svg)](https://circleci.com/gh/junioweb/work-at-olist)
+
 # Interview - Call Details
 
 The test specification is described [here](SPECIFICATION.md). The application is
