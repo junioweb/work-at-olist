@@ -1,0 +1,44 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+
+    docker:
+      - image: circleci/python:3.7.3
+        environment:
+          SECRET_KEY: d%w756u^3p0_&f@ov4%f*8-1z47br!+ev=n&#rmei$pms)$&c=
+          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
+      - image: circleci/postgres:10.9
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circle_test
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - deps1-
+      - run:
+          name: Installing dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          paths:
+            - "venv"
+      - run:
+          name: Running lint
+          command: |
+            . venv/bin/activate
+            flake8 --exclude=venv* --statistics
+      - run:
+          name: Running tests
+          command: |
+            . venv/bin/activate
+            coverage run --source='.' manage.py test
+      - store_artifacts:
+            path: test-reports/
+            destination: app
