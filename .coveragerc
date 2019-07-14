@@ -1,0 +1,8 @@
+[run]
+omit =
+    */migrations/*
+    */__init__.py
+    */apps.py
+    manage.py
+    work_at_olist/settings.py
+    work_at_olist/wsgi.py

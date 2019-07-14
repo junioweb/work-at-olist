@@ -33,12 +33,13 @@ jobs:
           name: Running lint
           command: |
             . venv/bin/activate
-            flake8 --exclude=venv* --statistics
+            flake8 --exclude=venv*,*migrations* --statistics
       - run:
           name: Running tests
           command: |
             . venv/bin/activate
             coverage run --source='.' manage.py test
+            coverage report
+            coverage html
       - store_artifacts:
-            path: test-reports/
-            destination: app
+            path: htmlcov
