@@ -14,6 +14,9 @@ class CallStart(models.Model):
     destination = models.CharField(max_length=11)
     timestamp = models.DateTimeField()
 
+    class Meta:
+        ordering = ['call_id']
+
     def __str__(self):
         return 'call_id: {}, started at {}'.format(self.call.id, self.timestamp)
 
@@ -31,6 +34,9 @@ class CallStart(models.Model):
 class CallEnd(models.Model):
     call = models.OneToOneField(Call, related_name='end', on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
+
+    class Meta:
+        ordering = ['call_id']
 
     def __str__(self):
         return 'call_id: {}, ended at {}'.format(self.call.id, self.timestamp)
