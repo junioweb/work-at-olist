@@ -3,9 +3,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from calls.models import Call, CallStart
+from calls.serializers import CallStartSerializer
 
 
-class DeleteCallStartTestCase(APITestCase):
+class GetTestCase(APITestCase):
     def setUp(self):
         first_call = Call.objects.create(id=70)
         second_call = Call.objects.create(id=71)
@@ -14,12 +15,25 @@ class DeleteCallStartTestCase(APITestCase):
         self.second_call_start = CallStart.objects.create(call=second_call, timestamp='2017-12-11T15:07:13Z',
                                                           source='99988526423', destination='9933468278')
 
-    def test_should_delete_call_start_when_requested_by_the_client(self):
-        response = self.client.delete(
-            reverse('calls:start-detail', kwargs={'pk': self.first_call_start.pk}))
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+    def test_should_get_all_started_calls_when_requested_by_the_client(self):
+        response = self.client.get(
+            reverse('calls:start-list'))
+        started_calls = CallStart.objects.all()
+        serializer = CallStartSerializer(started_calls, many=True)
 
-    def test_should_return_status_code_200_and_empty_data_when_delete_invalid_pk(self):
+        self.assertEqual(response.data['results'], serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_should_get_valid_single_call_start_when_requested_by_the_client(self):
+        response = self.client.get(
+            reverse('calls:start-detail', kwargs={'pk': self.first_call_start.pk}))
+        call_start = CallStart.objects.get(pk=self.first_call_start.pk)
+        serializer = CallStartSerializer(call_start)
+
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_should_return_status_code_200_and_empty_data_when_get_invalid_pk(self):
         response = self.client.get(
             reverse('calls:start-detail', kwargs={'pk': 27}))
         self.assertEqual(response.data, {})

@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase
 from calls.models import Call, CallStart
 
 
-class PutCallStartTestCase(APITestCase):
+class PutTestCase(APITestCase):
     def setUp(self):
         first_call = Call.objects.create(id=70)
         second_call = Call.objects.create(id=71)

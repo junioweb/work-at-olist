@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase
 from calls.models import Call
 
 
-class PostCallStartTestCase(APITestCase):
+class PostTestCase(APITestCase):
     def setUp(self):
         Call.objects.create(id=70)
         self.valid_payload = {
