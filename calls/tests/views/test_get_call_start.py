@@ -36,4 +36,5 @@ class GetCallStartTestCase(APITestCase):
     def test_should_get_invalid_single_call_start_when_requested_by_the_client(self):
         response = self.client.get(
             reverse('calls:start-detail', kwargs={'pk': 27}))
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
