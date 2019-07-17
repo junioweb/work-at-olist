@@ -6,7 +6,7 @@ from calls.models import Call, CallStart
 from calls.serializers import CallStartSerializer
 
 
-class CallStartTestCase(APITestCase):
+class GetCallStartTestCase(APITestCase):
     def setUp(self):
         first_call = Call.objects.create(id=70)
         second_call = Call.objects.create(id=71)
