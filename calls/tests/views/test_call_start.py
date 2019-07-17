@@ -16,7 +16,8 @@ class CallStartTestCase(APITestCase):
                                                           source='99988526423', destination='9933468278')
 
     def test_should_get_all_started_calls_when_requested_by_the_client(self):
-        response = self.client.get(reverse('calls:start-list'))
+        response = self.client.get(
+            reverse('calls:start-list'))
         started_calls = CallStart.objects.all()
         serializer = CallStartSerializer(started_calls, many=True)
 
@@ -24,9 +25,15 @@ class CallStartTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_should_get_valid_single_call_start_when_requested_by_the_client(self):
-        response = self.client.get(reverse('calls:start-detail', kwargs={'pk': self.first_call_start.pk}))
+        response = self.client.get(
+            reverse('calls:start-detail', kwargs={'pk': self.first_call_start.pk}))
         call_start = CallStart.objects.get(pk=self.first_call_start.pk)
         serializer = CallStartSerializer(call_start)
 
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_should_get_invalid_single_call_start_when_requested_by_the_client(self):
+        response = self.client.get(
+            reverse('calls:start-detail', kwargs={'pk': 27}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
