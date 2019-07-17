@@ -31,7 +31,7 @@ class PatchTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_should_return_bad_request_when_passed_a_invalid_payload(self):
+    def test_should_return_bad_request_when_passed_invalid_payload(self):
         response = self.client.patch(
             reverse('calls:start-detail', kwargs={'pk': self.second_call_start.pk}),
             data=json.dumps(self.invalid_payload),

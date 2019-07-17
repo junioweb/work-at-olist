@@ -28,7 +28,7 @@ class PutTestCase(APITestCase):
             'destination': '9933468278',
         }
 
-    def test_should_create_call_start_when_passed_valid_payload(self):
+    def test_should_update_call_start_when_passed_valid_payload(self):
         response = self.client.put(
             reverse('calls:start-detail', kwargs={'pk': self.first_call_start.pk}),
             data=json.dumps(self.valid_payload),
@@ -36,7 +36,7 @@ class PutTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_should_return_bad_request_when_create_invalid_call_start(self):
+    def test_should_return_bad_request_when_passed_invalid_payload(self):
         response = self.client.put(
             reverse('calls:start-detail', kwargs={'pk': self.first_call_start.pk}),
             data=json.dumps(self.invalid_payload),
