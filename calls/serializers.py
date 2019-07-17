@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Call, CallStart
+from .models import Call, CallEnd, CallStart
 
 
 class CallStartSerializer(serializers.ModelSerializer):
@@ -15,5 +15,5 @@ class CallEndSerializer(serializers.ModelSerializer):
     call_id = serializers.PrimaryKeyRelatedField(source='call', queryset=Call.objects.all())
 
     class Meta:
-        model = CallStart
+        model = CallEnd
         fields = ['id', 'timestamp', 'call_id']
