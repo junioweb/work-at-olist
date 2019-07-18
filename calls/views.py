@@ -6,9 +6,9 @@ from rest_framework.response import Response
 from .exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
 from .exceptions import TimestampGreaterThanCallEndTimestampError
 
-from .models import CallEnd, CallStart
+from .models import Call, CallEnd, CallStart
 
-from .serializers import CallEndSerializer, CallStartSerializer
+from .serializers import CallSerializer, CallEndSerializer, CallStartSerializer
 
 
 class BaseViewSet(viewsets.ModelViewSet):
@@ -46,3 +46,8 @@ class CallEndViewSet(BaseViewSet):
             return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         except TimestampLessThanCallStartTimestampError as err:
             return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class CallViewSet(BaseViewSet):
+    queryset = Call.objects.all()
+    serializer_class = CallSerializer
