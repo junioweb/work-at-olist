@@ -4,16 +4,16 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from calls.models import Call, CallStart
+from calls.models import Call, CallEnd, CallStart
 
 
 class PutTestCase(APITestCase):
     def setUp(self):
-        first_call = Call.objects.create(id=70)
-        second_call = Call.objects.create(id=71)
-        self.first_call_start = CallStart.objects.create(call=first_call, timestamp='2016-02-29T12:00:00Z',
+        self.first_call = Call.objects.create(id=70)
+        self.second_call = Call.objects.create(id=71)
+        self.first_call_start = CallStart.objects.create(call=self.first_call, timestamp='2016-02-29T12:00:00Z',
                                                          source='99988526423', destination='9933468278')
-        self.second_call_start = CallStart.objects.create(call=second_call, timestamp='2017-12-11T15:07:13Z',
+        self.second_call_start = CallStart.objects.create(call=self.second_call, timestamp='2017-12-11T15:07:13Z',
                                                           source='99988526423', destination='9933468278')
         self.valid_payload = {
             'call_id': 70,
@@ -43,3 +43,20 @@ class PutTestCase(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_should_return_status_422_and_error_message_when_timestamp_greater_than_end_call_timestamp(self):
+        CallEnd.objects.create(call=self.first_call, timestamp='2017-12-11T15:14:56Z')
+        payload = {
+            'call_id': 70,
+            'timestamp': '2017-12-11T15:18:56Z',
+            'source': '99988526423',
+            'destination': '9933468278',
+        }
+        response = self.client.put(
+            reverse('calls:start-detail', kwargs={'pk': self.first_call_start.pk}),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.data,
+                         {'detail': 'Start call timestamp can\'t be greater than the end call timestamp'})
+        self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)

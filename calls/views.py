@@ -4,6 +4,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from .exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
+from .exceptions import TimestampGreaterThanCallEndTimestampError
 
 from .models import CallEnd, CallStart
 
@@ -26,6 +27,12 @@ class BaseViewSet(viewsets.ModelViewSet):
 class CallStartViewSet(BaseViewSet):
     queryset = CallStart.objects.all()
     serializer_class = CallStartSerializer
+
+    def update(self, request, *args, **kwargs):
+        try:
+            return super().update(request, *args, **kwargs)
+        except TimestampGreaterThanCallEndTimestampError as err:
+            return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class CallEndViewSet(BaseViewSet):
