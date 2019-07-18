@@ -50,3 +50,19 @@ class PostTestCase(APITestCase):
         )
         self.assertEqual(response.data, {'detail': 'Not allowed to create a end call without a start call'})
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+    def test_should_return_status_422_and_error_message_when_create_with_timestamp_less_than_start_timestamp(self):
+        call = Call.objects.create(id=71)
+        CallStart.objects.create(call=call, timestamp='2017-12-11T15:07:13Z', source='99988526423',
+                                 destination='9933468278')
+        payload = {
+            'call_id': 71,
+            'timestamp': '2017-12-11T15:05:56Z',
+        }
+        response = self.client.post(
+            reverse('calls:end-list'),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.data, {'detail': 'End call timestamp can\'t be less than the start call timestamp'})
+        self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)

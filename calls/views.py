@@ -3,7 +3,7 @@ from django.http import Http404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
-from .exceptions import CallStartMissingError
+from .exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
 
 from .models import CallEnd, CallStart
 
@@ -36,4 +36,6 @@ class CallEndViewSet(BaseViewSet):
         try:
             return super().create(request, *args, **kwargs)
         except CallStartMissingError as err:
+            return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        except TimestampLessThanCallStartTimestampError as err:
             return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
