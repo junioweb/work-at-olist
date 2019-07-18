@@ -3,6 +3,8 @@ from django.http import Http404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
+from .exceptions import CallStartMissingError
+
 from .models import CallEnd, CallStart
 
 from .serializers import CallEndSerializer, CallStartSerializer
@@ -29,3 +31,9 @@ class CallStartViewSet(BaseViewSet):
 class CallEndViewSet(BaseViewSet):
     queryset = CallEnd.objects.all()
     serializer_class = CallEndSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except CallStartMissingError as err:
+            return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)

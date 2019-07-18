@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from calls.exceptions import TimestampGreaterThanCallEndTimestampError
+
 from calls.models import Call, CallStart, CallEnd
 
 
@@ -20,6 +22,6 @@ class CallStartTestCase(TestCase):
         self.call_start.save()
         CallEnd(call=self.call, timestamp='2016-02-29T14:00:00Z')
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TimestampGreaterThanCallEndTimestampError):
             self.call_start.timestamp = '2016-02-29T15:00:00Z'
             self.call_start.save()

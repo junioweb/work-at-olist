@@ -1,5 +1,6 @@
-from django.core.exceptions import ValidationError
 from django.test import TestCase
+
+from calls.exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
 
 from calls.models import Call, CallStart, CallEnd
 
@@ -19,12 +20,12 @@ class CallEndTestCase(TestCase):
         self.assertNotEqual(old_count, new_count)
 
     def test_should_throw_exception_when_create_a_end_call_without_start_call(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(CallStartMissingError):
             self.call_end.save()
 
     def test_should_throw_exception_when_create_a_end_call_with_timestamp_less_than_start_call_timestamp(self):
         CallStart.objects.create(call=self.call, timestamp='2016-02-29T12:00:00Z', source='99988526423',
                                  destination='9933468278')
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TimestampLessThanCallStartTimestampError):
             CallEnd.objects.create(timestamp='2016-02-29T11:00:00Z', call=self.call)

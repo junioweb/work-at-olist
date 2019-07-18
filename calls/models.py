@@ -1,5 +1,7 @@
-from django.core.exceptions import ValidationError
 from django.db import models
+
+from .exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
+from .exceptions import TimestampGreaterThanCallEndTimestampError
 
 
 class Call(models.Model):
@@ -24,7 +26,7 @@ class CallStart(models.Model):
         if self.id:
             try:
                 if self.timestamp > self.call.end.timestamp:
-                    raise ValueError("Start call timestamp can't be greater than the end call timestamp")
+                    raise TimestampGreaterThanCallEndTimestampError()
             except CallEnd.DoesNotExist:
                 return super().save(*args, **kwargs)
 
@@ -43,8 +45,8 @@ class CallEnd(models.Model):
 
     def save(self, *args, **kwargs):
         if not CallStart.objects.filter(call=self.call).exists():
-            raise ValidationError('Not allowed to create a end call without a start call')
+            raise CallStartMissingError()
         if self.timestamp < self.call.start.timestamp:
-            raise ValueError("End call timestamp can't be less than the start call timestamp")
+            raise TimestampLessThanCallStartTimestampError()
 
         super().save(*args, **kwargs)

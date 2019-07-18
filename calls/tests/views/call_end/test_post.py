@@ -36,3 +36,17 @@ class PostTestCase(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_should_return_status_422_and_error_message_in_detail_when_create_a_end_call_without_start_call(self):
+        Call.objects.create(id=71)
+        payload = {
+            'call_id': 71,
+            'timestamp': '2017-12-11T15:14:56Z',
+        }
+        response = self.client.post(
+            reverse('calls:end-list'),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.data, {'detail': 'Not allowed to create a end call without a start call'})
+        self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
