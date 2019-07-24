@@ -20,3 +20,10 @@ class TimestampGreaterThanCallEndTimestampError(ValidationError):
         if not message:
             message = 'Start call timestamp can\'t be greater than the end call timestamp'
         super().__init__(message, code, params)
+
+
+class TypeCallMissingError(ValidationError):
+    def __init__(self, message=None, code=None, params=None):
+        if not message:
+            message = 'Not allowed to create or update a call record without a field type'
+        super().__init__(message, code, params)

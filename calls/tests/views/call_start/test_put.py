@@ -17,12 +17,14 @@ class PutTestCase(APITestCase):
                                                           source='99988526423', destination='9933468278')
         self.valid_payload = {
             'call_id': 70,
+            'type': 'start',
             'timestamp': '2016-02-29T12:00:00Z',
             'source': '99988526423',
             'destination': '9933468278',
         }
         self.invalid_payload = {
             'call_id': 70,
+            'type': 'start',
             'timestamp': '2016-02-29T12:00:00Z',
             'source': '',
             'destination': '9933468278',
@@ -48,6 +50,7 @@ class PutTestCase(APITestCase):
         CallEnd.objects.create(call=self.first_call, timestamp='2017-12-11T15:14:56Z')
         payload = {
             'call_id': 70,
+            'type': 'start',
             'timestamp': '2017-12-11T15:18:56Z',
             'source': '99988526423',
             'destination': '9933468278',

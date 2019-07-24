@@ -19,10 +19,12 @@ class PutTestCase(APITestCase):
         self.second_call_end = CallEnd.objects.create(call=second_call, timestamp='2017-12-11T15:14:56Z')
         self.valid_payload = {
             'call_id': 70,
+            'type': 'end',
             'timestamp': '2016-02-29T13:00:00Z',
         }
         self.invalid_payload = {
             'call_id': 71,
+            'type': 'end',
             'timestamp': '',
         }
 

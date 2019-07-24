@@ -14,10 +14,12 @@ class PostTestCase(APITestCase):
                                  source='99988526423', destination='9933468278')
         self.valid_payload = {
             'call_id': 70,
+            'type': 'end',
             'timestamp': '2016-02-29T14:00:00Z',
         }
         self.invalid_payload = {
             'call_id': 70,
+            'type': 'end',
             'timestamp': '',
         }
 
@@ -41,6 +43,7 @@ class PostTestCase(APITestCase):
         Call.objects.create(id=71)
         payload = {
             'call_id': 71,
+            'type': 'end',
             'timestamp': '2017-12-11T15:14:56Z',
         }
         response = self.client.post(
@@ -57,6 +60,7 @@ class PostTestCase(APITestCase):
                                  destination='9933468278')
         payload = {
             'call_id': 71,
+            'type': 'end',
             'timestamp': '2017-12-11T15:05:56Z',
         }
         response = self.client.post(

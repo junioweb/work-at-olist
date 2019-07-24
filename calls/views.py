@@ -4,7 +4,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from .exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
-from .exceptions import TimestampGreaterThanCallEndTimestampError
+from .exceptions import TimestampGreaterThanCallEndTimestampError, TypeCallMissingError
 
 from .models import Call, CallEnd, CallStart
 
@@ -12,6 +12,12 @@ from .serializers import CallSerializer, CallEndSerializer, CallStartSerializer
 
 
 class BaseViewSet(viewsets.ModelViewSet):
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except TypeCallMissingError as err:
+            return Response({'detail': err.message}, status=status.HTTP_400_BAD_REQUEST)
+
     def retrieve(self, request, *args, **kwargs):
         try:
             return super().retrieve(request, *args, **kwargs)
