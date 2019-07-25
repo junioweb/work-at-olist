@@ -32,5 +32,12 @@ class TypeCallMissingError(ValidationError):
 class RecordsMissingError(ValidationError):
     def __init__(self, message=None, code=None, params=None):
         if not message:
-            message = 'Not allowed to create or update a call without a field records'
+            message = 'Not allowed to create or update a call without a list field records'
+        super().__init__(message, code, params)
+
+
+class EmptyRecordsError(ValidationError):
+    def __init__(self, message=None, code=None, params=None):
+        if not message:
+            message = 'Not allowed to create or update a call with empty records'
         super().__init__(message, code, params)
