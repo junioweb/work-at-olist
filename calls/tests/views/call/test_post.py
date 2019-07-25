@@ -4,6 +4,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from calls.models import Call
+
 
 class PostTestCase(APITestCase):
     def setUp(self):
@@ -44,4 +46,14 @@ class PostTestCase(APITestCase):
             data=json.dumps(self.invalid_payload),
             content_type='application/json'
         )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_should_return_bad_request_and_delete_call_when_create_call_with_invalid_records(self):
+        response = self.client.post(
+            reverse('calls:-list'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        has_call = Call.objects.filter(id=self.invalid_payload['call_id']).exists()
+        self.assertEqual(has_call, False)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

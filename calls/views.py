@@ -66,19 +66,23 @@ class CallViewSet(BaseViewSet):
 
         call_serializer = self.get_serializer(data=request.data)
         call_serializer.is_valid(raise_exception=True)
-        call_serializer.save()
+        call = call_serializer.save()
 
-        for record in request.data['records']:
-            type_call = record.get('type')
-            record['call_id'] = call_serializer.data['call_id']
-            if type_call == 'start':
-                start_serializer = CallStartSerializer(data=record)
-                start_serializer.is_valid(raise_exception=True)
-                start_serializer.save()
-            elif type_call == 'end':
-                end_serializer = CallEndSerializer(data=record)
-                end_serializer.is_valid(raise_exception=True)
-                end_serializer.save()
+        try:
+            for record in request.data['records']:
+                type_call = record.get('type')
+                record['call_id'] = call.id
+                if type_call == 'start':
+                    start_serializer = CallStartSerializer(data=record)
+                    start_serializer.is_valid(raise_exception=True)
+                    start_serializer.save()
+                elif type_call == 'end':
+                    end_serializer = CallEndSerializer(data=record)
+                    end_serializer.is_valid(raise_exception=True)
+                    end_serializer.save()
+        except Exception as err:
+            call.delete()
+            raise err
 
         headers = self.get_success_headers(call_serializer.data)
         return Response(call_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
