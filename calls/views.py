@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from .exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
 from .exceptions import TimestampGreaterThanCallEndTimestampError, TypeCallMissingError
+from .exceptions import RecordsMissingError
 
 from .models import Call, CallEnd, CallStart
 
@@ -69,6 +70,9 @@ class CallViewSet(BaseViewSet):
         call = call_serializer.save()
 
         try:
+            if 'records' not in request.data:
+                raise RecordsMissingError()
+
             for record in request.data['records']:
                 type_call = record.get('type')
                 if type_call is None:
@@ -83,12 +87,14 @@ class CallViewSet(BaseViewSet):
                     end_serializer = CallEndSerializer(data=record)
                     end_serializer.is_valid(raise_exception=True)
                     end_serializer.save()
+        except RecordsMissingError as err:
+            return Response({'detail': err.message}, status=status.HTTP_400_BAD_REQUEST)
         except TypeCallMissingError as err:
-            call.delete()
             return Response({'detail': err.message}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as err:
-            call.delete()
             raise err
+        finally:
+            call.delete()
 
         headers = self.get_success_headers(call_serializer.data)
         return Response(call_serializer.data, status=status.HTTP_201_CREATED, headers=headers)

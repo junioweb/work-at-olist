@@ -76,3 +76,15 @@ class PostTestCase(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_should_return_bad_request_when_create_call_without_records(self):
+        invalid_payload = {
+            'call_id': 71,
+        }
+
+        response = self.client.post(
+            reverse('calls:-list'),
+            data=json.dumps(invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
