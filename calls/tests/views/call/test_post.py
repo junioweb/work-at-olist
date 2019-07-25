@@ -57,3 +57,22 @@ class PostTestCase(APITestCase):
         has_call = Call.objects.filter(id=self.invalid_payload['call_id']).exists()
         self.assertEqual(has_call, False)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_should_return_bad_request_when_create_call_records_without_type(self):
+        invalid_payload = {
+            'call_id': 71,
+            'records': [
+                {
+                    'timestamp': '2016-02-29T12:00:00Z',
+                    'source': '99988526423',
+                    'destination': '9933468278',
+                },
+            ]
+        }
+
+        response = self.client.post(
+            reverse('calls:-list'),
+            data=json.dumps(invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

@@ -71,6 +71,9 @@ class CallViewSet(BaseViewSet):
         try:
             for record in request.data['records']:
                 type_call = record.get('type')
+                if type_call is None:
+                    raise TypeCallMissingError()
+
                 record['call_id'] = call.id
                 if type_call == 'start':
                     start_serializer = CallStartSerializer(data=record)
@@ -80,6 +83,9 @@ class CallViewSet(BaseViewSet):
                     end_serializer = CallEndSerializer(data=record)
                     end_serializer.is_valid(raise_exception=True)
                     end_serializer.save()
+        except TypeCallMissingError as err:
+            call.delete()
+            return Response({'detail': err.message}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as err:
             call.delete()
             raise err
