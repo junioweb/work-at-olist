@@ -27,3 +27,10 @@ class TypeCallMissingError(ValidationError):
         if not message:
             message = 'Not allowed to create or update a call record without a field type'
         super().__init__(message, code, params)
+
+
+class RecordsMissingError(ValidationError):
+    def __init__(self, message=None, code=None, params=None):
+        if not message:
+            message = 'Not allowed to create or update a call without a field records'
+        super().__init__(message, code, params)

@@ -46,7 +46,7 @@ class CallEndSerializer(CallRecordSerializer):
 
 
 class CallSerializer(serializers.ModelSerializer):
-    call_id = serializers.ReadOnlyField(source='id')
+    call_id = serializers.IntegerField(source='id', required=False)
     records = serializers.SerializerMethodField()
 
     class Meta:
@@ -54,10 +54,12 @@ class CallSerializer(serializers.ModelSerializer):
         fields = ['call_id', 'records']
 
     def get_records(self, obj):
-        obj.start.type = 'start'
-        if obj.end:
+        try:
+            obj.start.type = 'start'
             obj.end.type = 'end'
             data = [CallRecordSerializer(obj.start).data, CallRecordSerializer(obj.end).data]
-        else:
+        except CallEnd.DoesNotExist:
             data = [CallRecordSerializer(obj.start).data]
+        except CallStart.DoesNotExist:
+            return []
         return data

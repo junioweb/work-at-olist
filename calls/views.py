@@ -1,4 +1,6 @@
 from django.http import Http404
+from django.shortcuts import redirect
+from django.urls import reverse
 
 from rest_framework import status, viewsets
 from rest_framework.response import Response
@@ -57,3 +59,23 @@ class CallEndViewSet(BaseViewSet):
 class CallViewSet(BaseViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
+
+    def create(self, request, *args, **kwargs):
+        if Call.objects.filter(id=request.data['call_id']).exists():
+            return redirect(reverse('calls:-detail', kwargs={'pk': request.data['call_id']}))
+        else:
+            return super().create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        call = serializer.save()
+        for record in self.request.data['records']:
+            type_call = record.get('type')
+            record['call_id'] = call.id
+            if type_call == 'start':
+                start_serializer = CallStartSerializer(data=record)
+                start_serializer.is_valid(raise_exception=True)
+                start_serializer.save()
+            elif type_call == 'end':
+                end_serializer = CallEndSerializer(data=record)
+                end_serializer.is_valid(raise_exception=True)
+                end_serializer.save()
