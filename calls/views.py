@@ -115,9 +115,8 @@ class CallViewSet(BaseViewSet):
         return Response(call_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.get('partial', False)
         call_instance = self.get_object()
-        start_serializer = None
         end_serializer = None
 
         try:
@@ -136,6 +135,7 @@ class CallViewSet(BaseViewSet):
                     start_instance = call_instance.start
                     start_serializer = CallStartSerializer(start_instance, data=record, partial=partial)
                     start_serializer.is_valid(raise_exception=True)
+                    start_serializer.save()
                 elif type_call == 'end':
                     end_instance = call_instance.end
                     end_serializer = CallEndSerializer(end_instance, data=record, partial=partial)
@@ -149,19 +149,9 @@ class CallViewSet(BaseViewSet):
         except Exception as err:
             raise err
 
-        start_serializer.save()
         if end_serializer is not None:
             end_serializer.save()
-        else:
+        elif not partial:
             call_instance.end.delete()
 
-        call_serializer = self.get_serializer(call_instance, data=request.data, partial=partial)
-        call_serializer.is_valid(raise_exception=True)
-        call_serializer.save()
-
-        if getattr(call_instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            call_instance._prefetched_objects_cache = {}
-
-        return Response(call_serializer.data)
+        return super().update(request, *args, **kwargs)
