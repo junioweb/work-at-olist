@@ -18,8 +18,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - calls-records-{{ epoch }}
-            - calls-records-
+            - calls-recods-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - calls-recods-
       - run:
           name: Installing dependencies
           command: |
@@ -27,7 +27,7 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
       - save_cache:
-          key: calls-records-{{ epoch }}
+          key: calls-recods-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
             - "venv"
       - run:

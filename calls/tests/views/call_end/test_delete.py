@@ -23,6 +23,6 @@ class DeleteTestCase(APITestCase):
 
     def test_should_return_status_code_200_and_empty_data_when_delete_invalid_pk(self):
         response = self.client.get(
-            reverse('calls:end-detail', kwargs={'pk': 27}))
+            reverse('calls:end-detail', kwargs={'pk': 2788}))
         self.assertEqual(response.data, {})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
