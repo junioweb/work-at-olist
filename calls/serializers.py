@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import serializers
 
 from .models import Call, CallEnd, CallStart
@@ -7,8 +9,8 @@ from .exceptions import TypeCallMissingError
 
 class CallRecordSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    type = serializers.CharField(min_length=3, max_length=5, required=False)
-    timestamp = serializers.DateTimeField()
+    type = serializers.CharField(min_length=3, max_length=5)
+    timestamp = serializers.DateTimeField(initial=datetime.datetime.now())
     source = serializers.CharField(min_length=10, max_length=11, required=False)
     destination = serializers.CharField(min_length=10, max_length=11, required=False)
 
@@ -39,10 +41,14 @@ class CallRecordSerializer(serializers.Serializer):
 
 class CallStartSerializer(CallRecordSerializer):
     call_id = serializers.PrimaryKeyRelatedField(source='call', queryset=Call.objects.all())
+    type = serializers.CharField(initial='start', max_length=5, write_only=True)
 
 
 class CallEndSerializer(CallRecordSerializer):
     call_id = serializers.PrimaryKeyRelatedField(source='call', queryset=Call.objects.all())
+    type = serializers.CharField(initial='end', max_length=3, write_only=True)
+    source = None
+    destination = None
 
 
 class CallSerializer(serializers.ModelSerializer):
