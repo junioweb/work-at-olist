@@ -30,7 +30,7 @@ class CallStart(models.Model):
             except CallEnd.DoesNotExist:
                 return super().save(*args, **kwargs)
 
-        super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class CallEnd(models.Model):
@@ -49,4 +49,4 @@ class CallEnd(models.Model):
         if self.timestamp < self.call.start.timestamp:
             raise TimestampLessThanCallStartTimestampError()
 
-        super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
