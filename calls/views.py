@@ -111,8 +111,7 @@ class CallViewSet(BaseViewSet):
         finally:
             call.delete()
 
-        headers = self.get_success_headers(call_serializer.data)
-        return Response(call_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.get('partial', False)
