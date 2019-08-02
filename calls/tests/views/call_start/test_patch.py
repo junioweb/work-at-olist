@@ -29,7 +29,7 @@ class PatchTestCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_should_return_bad_request_when_passed_invalid_payload(self):
         response = self.client.patch(

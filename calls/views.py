@@ -17,23 +17,27 @@ from .serializers import CallSerializer, CallEndSerializer, CallStartSerializer
 class BaseViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
-            return super().create(request, *args, **kwargs)
+            response = super().create(request, *args, **kwargs)
         except TypeCallMissingError as err:
-            return Response({'detail': err.message}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({'detail': err.message}, status=status.HTTP_400_BAD_REQUEST)
+
+        return response
 
     def retrieve(self, request, *args, **kwargs):
         try:
-            return super().retrieve(request, *args, **kwargs)
+            response = super().retrieve(request, *args, **kwargs)
         except Http404:
-            return Response({}, status=status.HTTP_200_OK)
+            response = Response({}, status=status.HTTP_200_OK)
+
+        return response
 
     def update(self, request, *args, **kwargs):
         try:
-            super().update(request, *args, **kwargs)
+            response = super().update(request, *args, **kwargs)
         except Http404:
-            return Response({}, status=status.HTTP_200_OK)
+            response = Response({}, status=status.HTTP_200_OK)
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return response
 
 
 class CallStartViewSet(BaseViewSet):
@@ -42,9 +46,11 @@ class CallStartViewSet(BaseViewSet):
 
     def update(self, request, *args, **kwargs):
         try:
-            return super().update(request, *args, **kwargs)
+            response = super().update(request, *args, **kwargs)
         except TimestampGreaterThanCallEndTimestampError as err:
-            return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            response = Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        return response
 
 
 class CallEndViewSet(BaseViewSet):
@@ -53,11 +59,13 @@ class CallEndViewSet(BaseViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            return super().create(request, *args, **kwargs)
+            response = super().create(request, *args, **kwargs)
         except CallStartMissingError as err:
-            return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            response = Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         except TimestampLessThanCallStartTimestampError as err:
-            return Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            response = Response({'detail': err.message}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        return response
 
 
 class CallViewSet(BaseViewSet):
