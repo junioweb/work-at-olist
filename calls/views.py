@@ -116,6 +116,7 @@ class CallViewSet(BaseViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.get('partial', False)
         call_instance = self.get_object()
+        start_serializer = None
         end_serializer = None
 
         try:
@@ -134,7 +135,6 @@ class CallViewSet(BaseViewSet):
                     start_instance = call_instance.start
                     start_serializer = CallStartSerializer(start_instance, data=record, partial=partial)
                     start_serializer.is_valid(raise_exception=True)
-                    start_serializer.save()
                 elif type_call == 'end':
                     end_instance = call_instance.end
                     end_serializer = CallEndSerializer(end_instance, data=record, partial=partial)
@@ -148,6 +148,8 @@ class CallViewSet(BaseViewSet):
         except Exception as err:
             raise err
 
+        if start_serializer is not None:
+            start_serializer.save()
         if end_serializer is not None:
             end_serializer.save()
         elif not partial:
