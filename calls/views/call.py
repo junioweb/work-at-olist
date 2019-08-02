@@ -1,34 +1,12 @@
-from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from rest_framework import status, viewsets
-from rest_framework.response import Response
+from calls.exceptions import TypeCallMissingError
+from calls.exceptions import RecordsMissingError, EmptyRecordsError
+from calls.models import Call, CallEnd, CallStart
+from calls.serializers import CallSerializer, CallEndSerializer, CallStartSerializer
 
-from .exceptions import TypeCallMissingError
-from .exceptions import RecordsMissingError, EmptyRecordsError
-
-from .models import Call, CallEnd, CallStart
-
-from .serializers import CallSerializer, CallEndSerializer, CallStartSerializer
-
-
-class BaseViewSet(viewsets.ModelViewSet):
-    def retrieve(self, request, *args, **kwargs):
-        try:
-            response = super().retrieve(request, *args, **kwargs)
-        except Http404:
-            response = Response({}, status=status.HTTP_200_OK)
-
-        return response
-
-    def update(self, request, *args, **kwargs):
-        try:
-            response = super().update(request, *args, **kwargs)
-        except Http404:
-            response = Response({}, status=status.HTTP_200_OK)
-
-        return response
+from .base import BaseViewSet
 
 
 class CallStartViewSet(BaseViewSet):

@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import CallViewSet, CallStartViewSet, CallEndViewSet
+from .views.call import CallViewSet, CallStartViewSet, CallEndViewSet
 
 router = routers.DefaultRouter()
 router.register(r'start', CallStartViewSet, basename='start')
