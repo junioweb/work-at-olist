@@ -23,6 +23,19 @@ class CallViewSet(BaseViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
 
+    def records_is_valid(self, request):
+        if 'records' not in request.data:
+            raise RecordsMissingError()
+        if not len(request.data['records']):
+            raise EmptyRecordsError()
+        return True
+
+    def type_record_is_valid(self, record):
+        type_call = record.get('type')
+        if type_call is None:
+            raise TypeCallMissingError()
+        return True
+
     def create(self, request, *args, **kwargs):
         if Call.objects.filter(id=request.data['call_id']).exists():
             return redirect(reverse('calls:-detail', kwargs={'pk': request.data['call_id']}))
@@ -32,16 +45,11 @@ class CallViewSet(BaseViewSet):
         call = call_serializer.save()
 
         try:
-            if 'records' not in request.data:
-                raise RecordsMissingError()
-            if not len(request.data['records']):
-                raise EmptyRecordsError()
+            self.records_is_valid(request)
 
             for record in request.data['records']:
+                self.type_record_is_valid(record)
                 type_call = record.get('type')
-                if type_call is None:
-                    raise TypeCallMissingError()
-
                 record['call_id'] = call.id
                 if type_call == 'start':
                     start_serializer = CallStartSerializer(data=record)
@@ -62,16 +70,11 @@ class CallViewSet(BaseViewSet):
         start_serializer = None
         end_serializer = None
 
-        if 'records' not in request.data:
-            raise RecordsMissingError()
-        if not len(request.data['records']):
-            raise EmptyRecordsError()
+        self.records_is_valid(request)
 
         for record in request.data['records']:
+            self.type_record_is_valid(record)
             type_call = record.get('type')
-            if type_call is None:
-                raise TypeCallMissingError()
-
             record['call_id'] = call_instance.id
             if type_call == 'start':
                 start_instance = call_instance.start
