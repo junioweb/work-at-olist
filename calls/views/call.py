@@ -12,11 +12,13 @@ from .base import BaseViewSet
 class CallStartViewSet(BaseViewSet):
     queryset = CallStart.objects.all()
     serializer_class = CallStartSerializer
+    filterset_fields = ('timestamp', 'source', 'destination', 'call_id')
 
 
 class CallEndViewSet(BaseViewSet):
     queryset = CallEnd.objects.all()
     serializer_class = CallEndSerializer
+    filterset_fields = ('timestamp', 'call_id')
 
 
 class CallViewSet(BaseViewSet):
