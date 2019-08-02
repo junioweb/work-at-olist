@@ -8,8 +8,8 @@ from calls.serializers import CallEndSerializer
 
 class GetTestCase(APITestCase):
     def setUp(self):
-        first_call = Call.objects.create(id=70)
-        second_call = Call.objects.create(id=71)
+        first_call = Call.objects.create(id=85)
+        second_call = Call.objects.create(id=86)
         CallStart.objects.create(call=first_call, timestamp='2016-02-29T12:00:00Z',
                                  source='99988526423', destination='9933468278')
         CallStart.objects.create(call=second_call, timestamp='2017-12-11T15:07:13Z',
@@ -37,6 +37,6 @@ class GetTestCase(APITestCase):
 
     def test_should_return_status_code_200_and_empty_data_when_get_invalid_pk(self):
         response = self.client.get(
-            reverse('calls:end-detail', kwargs={'pk': 27}))
+            reverse('calls:end-detail', kwargs={'pk': 48}))
         self.assertEqual(response.data, {})
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -9,16 +9,16 @@ from calls.models import Call, CallStart
 
 class PostTestCase(APITestCase):
     def setUp(self):
-        first_call = Call.objects.create(id=70)
+        first_call = Call.objects.create(id=89)
         CallStart.objects.create(call=first_call, timestamp='2016-02-29T12:00:00Z',
                                  source='99988526423', destination='9933468278')
         self.valid_payload = {
-            'call_id': 70,
+            'call_id': 89,
             'type': 'end',
             'timestamp': '2016-02-29T14:00:00Z',
         }
         self.invalid_payload = {
-            'call_id': 70,
+            'call_id': 89,
             'type': 'end',
             'timestamp': '',
         }
@@ -40,9 +40,9 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_return_status_422_and_error_message_in_detail_when_create_a_end_call_without_start_call(self):
-        Call.objects.create(id=71)
+        Call.objects.create(id=90)
         payload = {
-            'call_id': 71,
+            'call_id': 90,
             'type': 'end',
             'timestamp': '2017-12-11T15:14:56Z',
         }
@@ -55,11 +55,11 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def test_should_return_status_422_and_error_message_when_create_with_timestamp_less_than_start_timestamp(self):
-        call = Call.objects.create(id=71)
+        call = Call.objects.create(id=91)
         CallStart.objects.create(call=call, timestamp='2017-12-11T15:07:13Z', source='99988526423',
                                  destination='9933468278')
         payload = {
-            'call_id': 71,
+            'call_id': 91,
             'type': 'end',
             'timestamp': '2017-12-11T15:05:56Z',
         }

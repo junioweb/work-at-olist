@@ -6,7 +6,7 @@ from calls.models import Call, CallStart, CallEnd
 
 class CallTestCase(TestCase):
     def setUp(self):
-        self.call = Call(id=70)
+        self.call = Call(id=69)
 
     def test_should_be_able_to_create_a_call_when_saving_the_object(self):
         old_count = Call.objects.count()

@@ -9,21 +9,21 @@ from calls.models import Call, CallEnd, CallStart
 
 class PutTestCase(APITestCase):
     def setUp(self):
-        self.first_call = Call.objects.create(id=70)
-        self.second_call = Call.objects.create(id=71)
+        self.first_call = Call.objects.create(id=101)
+        self.second_call = Call.objects.create(id=102)
         self.first_call_start = CallStart.objects.create(call=self.first_call, timestamp='2016-02-29T12:00:00Z',
                                                          source='99988526423', destination='9933468278')
         self.second_call_start = CallStart.objects.create(call=self.second_call, timestamp='2017-12-11T15:07:13Z',
                                                           source='99988526423', destination='9933468278')
         self.valid_payload = {
-            'call_id': 70,
+            'call_id': 101,
             'type': 'start',
             'timestamp': '2016-02-29T12:00:00Z',
             'source': '99988526423',
             'destination': '9933468278',
         }
         self.invalid_payload = {
-            'call_id': 70,
+            'call_id': 102,
             'type': 'start',
             'timestamp': '2016-02-29T12:00:00Z',
             'source': '',
@@ -49,7 +49,7 @@ class PutTestCase(APITestCase):
     def test_should_return_status_422_and_error_message_when_timestamp_greater_than_end_call_timestamp(self):
         CallEnd.objects.create(call=self.first_call, timestamp='2017-12-11T15:14:56Z')
         payload = {
-            'call_id': 70,
+            'call_id': 101,
             'type': 'start',
             'timestamp': '2017-12-11T15:18:56Z',
             'source': '99988526423',

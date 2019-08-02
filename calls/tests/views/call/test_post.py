@@ -10,7 +10,7 @@ from calls.models import Call
 class PostTestCase(APITestCase):
     def setUp(self):
         self.valid_payload = {
-            'call_id': 70,
+            'call_id': 76,
             'records': [
                 {
                     'type': 'start',
@@ -21,7 +21,7 @@ class PostTestCase(APITestCase):
             ]
         }
         self.invalid_payload = {
-            'call_id': 71,
+            'call_id': 77,
             'records': [
                 {
                     'type': 'start',
@@ -60,7 +60,7 @@ class PostTestCase(APITestCase):
 
     def test_should_return_bad_request_when_create_call_records_without_type(self):
         invalid_payload = {
-            'call_id': 71,
+            'call_id': 78,
             'records': [
                 {
                     'timestamp': '2016-02-29T12:00:00Z',
@@ -79,7 +79,7 @@ class PostTestCase(APITestCase):
 
     def test_should_return_bad_request_when_create_call_without_records(self):
         invalid_payload = {
-            'call_id': 71,
+            'call_id': 79,
         }
 
         response = self.client.post(
@@ -91,7 +91,7 @@ class PostTestCase(APITestCase):
 
     def test_should_return_bad_request_when_create_call_with_empty_records(self):
         invalid_payload = {
-            'call_id': 71,
+            'call_id': 80,
             'records': []
         }
 

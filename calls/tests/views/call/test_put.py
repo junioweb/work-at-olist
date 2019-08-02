@@ -9,8 +9,8 @@ from calls.models import Call, CallEnd, CallStart
 
 class PutTestCase(APITestCase):
     def setUp(self):
-        self.first_call = Call.objects.create(id=70)
-        self.second_call = Call.objects.create(id=71)
+        self.first_call = Call.objects.create(id=81)
+        self.second_call = Call.objects.create(id=82)
         CallStart.objects.create(call=self.first_call, timestamp='2016-02-29T12:00:00Z',
                                  source='99988526423', destination='9933468278')
         CallStart.objects.create(call=self.second_call, timestamp='2017-12-11T15:07:13Z',
@@ -19,7 +19,7 @@ class PutTestCase(APITestCase):
         CallEnd.objects.create(call=self.second_call, timestamp='2017-12-11T15:14:56Z')
 
         self.valid_payload = {
-            'call_id': 70,
+            'call_id': 81,
             'records': [
                 {
                     'type': 'start',
@@ -30,7 +30,7 @@ class PutTestCase(APITestCase):
             ]
         }
         self.invalid_payload = {
-            'call_id': 71,
+            'call_id': 82,
             'records': [
                 {
                     'type': 'start',

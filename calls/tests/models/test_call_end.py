@@ -7,7 +7,7 @@ from calls.models import Call, CallStart, CallEnd
 
 class CallEndTestCase(TestCase):
     def setUp(self):
-        self.call = Call.objects.create(id=70)
+        self.call = Call.objects.create(id=68)
         self.call_end = CallEnd(call=self.call, timestamp='2016-02-29T14:00:00Z')
 
     def test_should_be_able_to_create_a_end_call_when_saving_the_object(self):

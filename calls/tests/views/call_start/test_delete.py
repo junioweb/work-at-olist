@@ -7,8 +7,8 @@ from calls.models import Call, CallStart
 
 class DeleteTestCase(APITestCase):
     def setUp(self):
-        first_call = Call.objects.create(id=70)
-        second_call = Call.objects.create(id=71)
+        first_call = Call.objects.create(id=94)
+        second_call = Call.objects.create(id=95)
         self.first_call_start = CallStart.objects.create(call=first_call, timestamp='2016-02-29T12:00:00Z',
                                                          source='99988526423', destination='9933468278')
         self.second_call_start = CallStart.objects.create(call=second_call, timestamp='2017-12-11T15:07:13Z',
@@ -21,6 +21,6 @@ class DeleteTestCase(APITestCase):
 
     def test_should_return_status_code_200_and_empty_data_when_delete_invalid_pk(self):
         response = self.client.get(
-            reverse('calls:start-detail', kwargs={'pk': 27}))
+            reverse('calls:start-detail', kwargs={'pk': 58}))
         self.assertEqual(response.data, {})
         self.assertEqual(response.status_code, status.HTTP_200_OK)

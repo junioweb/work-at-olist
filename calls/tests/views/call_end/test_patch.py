@@ -9,8 +9,8 @@ from calls.models import Call, CallEnd, CallStart
 
 class PatchTestCase(APITestCase):
     def setUp(self):
-        first_call = Call.objects.create(id=70)
-        second_call = Call.objects.create(id=71)
+        first_call = Call.objects.create(id=87)
+        second_call = Call.objects.create(id=88)
         CallStart.objects.create(call=first_call, timestamp='2016-02-29T12:00:00Z',
                                  source='99988526423', destination='9933468278')
         CallStart.objects.create(call=second_call, timestamp='2017-12-11T15:07:13Z',

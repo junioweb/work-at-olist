@@ -9,16 +9,16 @@ from calls.models import Call
 
 class PostTestCase(APITestCase):
     def setUp(self):
-        Call.objects.create(id=70)
+        Call.objects.create(id=100)
         self.valid_payload = {
-            'call_id': 70,
+            'call_id': 100,
             'type': 'start',
             'timestamp': '2016-02-29T12:00:00Z',
             'source': '99988526423',
             'destination': '9933468278',
         }
         self.invalid_payload = {
-            'call_id': 70,
+            'call_id': 100,
             'type': 'start',
             'timestamp': '2016-02-29T12:00:00Z',
             'source': '',

@@ -7,7 +7,7 @@ from calls.models import Call, CallStart, CallEnd
 
 class CallStartTestCase(TestCase):
     def setUp(self):
-        self.call = Call.objects.create(id=70)
+        self.call = Call.objects.create(id=67)
         self.call_start = CallStart(call=self.call, timestamp='2016-02-29T12:00:00Z', source='99988526423',
                                     destination='9933468278')
 
