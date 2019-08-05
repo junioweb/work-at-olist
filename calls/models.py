@@ -5,9 +5,16 @@ from .exceptions import TimestampGreaterThanCallEndTimestampError
 
 
 class Call(models.Model):
-
     def __str__(self):
         return 'call_id: {}'.format(self.id)
+
+    def get_duration(self, in_minutes=False):
+        duration = self.end.timestamp - self.start.timestamp
+        if in_minutes:
+            minutes, seconds = divmod(duration.total_seconds(), 60)
+            return minutes
+        else:
+            return duration
 
 
 class CallStart(models.Model):
