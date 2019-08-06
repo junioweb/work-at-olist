@@ -1,3 +1,5 @@
+import datetime
+
 from django.test import TestCase
 
 from bills.domain.price_rule import PriceRule
@@ -13,3 +15,9 @@ class PriceRuleTestCase(TestCase):
         price_rule = PriceRule(minute_charge=0.09, standing_charge=0.36)
         price = price_rule.calculate_price(duration=8, with_connection=True)
         self.assertEqual(price, 1.08)
+
+    def test_should_return_true_when_time_is_in_range(self):
+        price_rule = PriceRule(start_time=datetime.time(hour=22, minute=0),
+                               end_time=datetime.time(hour=6, minute=0))
+        time = datetime.time(hour=4, minute=57)
+        self.assertTrue(price_rule.time_in_range(time))

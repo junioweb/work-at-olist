@@ -16,3 +16,9 @@ class PriceRule:
             return price + self.standing_charge
         else:
             return price
+
+    def time_in_range(self, time):
+        if self.start_time <= self.end_time:
+            return self.start_time <= time <= self.end_time
+        else:
+            return self.start_time <= time or time <= self.end_time
