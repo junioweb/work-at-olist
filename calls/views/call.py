@@ -1,6 +1,9 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 
+from rest_framework import status
+from rest_framework.response import Response
+
 from calls.exceptions import TypeCallMissingError
 from calls.exceptions import RecordsMissingError, EmptyRecordsError
 from calls.models import Call, CallEnd, CallStart
@@ -61,10 +64,12 @@ class CallViewSet(BaseViewSet):
                     end_serializer = CallEndSerializer(data=record)
                     end_serializer.is_valid(raise_exception=True)
                     end_serializer.save()
-        finally:
+        except Exception as err:
             call.delete()
+            raise err
 
-        return super().create(request, *args, **kwargs)
+        headers = self.get_success_headers(call_serializer.data)
+        return Response(call_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.get('partial', False)
