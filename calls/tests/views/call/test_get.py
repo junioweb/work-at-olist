@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from calls.models import Call, CallEnd, CallStart
+from calls.domain.call import Call, CallEnd, CallStart
 from calls.serializers import CallSerializer
 
 

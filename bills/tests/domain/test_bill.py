@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from calls.models import Call, CallStart, CallEnd
+from calls.domain.call import Call, CallStart, CallEnd
 
 from bills.domain.bill import Bill
 from bills.exceptions import CallDifferentPeriodsError, CallDifferentSubscribersError

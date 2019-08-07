@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from calls.exceptions import TimestampGreaterThanCallEndTimestampError
 
-from calls.models import Call, CallStart, CallEnd
+from calls.domain.call import Call, CallStart, CallEnd
 
 
 class CallStartTestCase(TestCase):

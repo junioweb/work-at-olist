@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from calls.models import Call, CallStart
+from calls.domain.call import Call, CallStart
 
 
 class PatchTestCase(APITestCase):

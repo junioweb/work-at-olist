@@ -1,7 +1,7 @@
 from django.db import models
 
-from .exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
-from .exceptions import TimestampGreaterThanCallEndTimestampError
+from calls.exceptions import CallStartMissingError, TimestampLessThanCallStartTimestampError
+from calls.exceptions import TimestampGreaterThanCallEndTimestampError
 
 
 class Call(models.Model):

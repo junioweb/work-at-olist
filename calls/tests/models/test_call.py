@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from calls.models import Call
+from calls.domain.call import Call
 
 
 class CallTestCase(TestCase):

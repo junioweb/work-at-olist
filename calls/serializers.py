@@ -2,7 +2,7 @@ import datetime
 
 from rest_framework import serializers
 
-from .models import Call, CallEnd, CallStart
+from calls.domain.call import Call, CallEnd, CallStart
 
 from .exceptions import TypeCallMissingError
 

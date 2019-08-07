@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from calls.exceptions import TypeCallMissingError
 from calls.exceptions import RecordsMissingError, EmptyRecordsError
-from calls.models import Call, CallEnd, CallStart
+from calls.domain.call import Call, CallEnd, CallStart
 from calls.serializers import CallSerializer, CallEndSerializer, CallStartSerializer
 
 from .base import BaseViewSet

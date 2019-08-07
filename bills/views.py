@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from calls.models import Call, CallEnd
+from calls.domain.call import Call, CallEnd
 from bills.serializers import BillSerializer
 from bills.exceptions import SubscriberNotPassedError
 
