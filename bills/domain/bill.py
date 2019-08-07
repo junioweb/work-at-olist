@@ -51,21 +51,24 @@ class Bill:
             return self._calculate_price_regular(self.rules['standard'], call, partial_price, partial)
         elif self._is_diff_dates_and_in_range_start_time_and_end_time(self.rules['reduced'], call):
             price, dt_partial = self._calculate_price_partial(self.rules['reduced'], call, partial_price, partial)
-            call.start.timestamp = dt_partial
+            call_copy = copy.deepcopy(call)
+            call_copy.start.timestamp = dt_partial
             partial = True
-            return self.get_price(call, price, partial)
+            return self.get_price(call_copy, price, partial)
         elif self._in_range_start_time_and_end_time(self.rules['reduced'], call):
             return self._calculate_price_regular(self.rules['reduced'], call, partial_price, partial)
         elif self._in_range_start_time(self.rules['standard'], call):
             price, dt_partial = self._calculate_price_partial(self.rules['standard'], call, partial_price, partial)
-            call.start.timestamp = dt_partial
+            call_copy = copy.deepcopy(call)
+            call_copy.start.timestamp = dt_partial
             partial = True
-            return self.get_price(call, price, partial)
+            return self.get_price(call_copy, price, partial)
         elif self._in_range_start_time(self.rules['reduced'], call):
             price, dt_partial = self._calculate_price_partial(self.rules['reduced'], call, partial_price, partial)
-            call.start.timestamp = dt_partial
+            call_copy = copy.deepcopy(call)
+            call_copy.start.timestamp = dt_partial
             partial = True
-            return self.get_price(call, price, partial)
+            return self.get_price(call_copy, price, partial)
 
     def _calls_is_valid(self):
         for call in self._calls:
