@@ -17,21 +17,3 @@ class TimestampGreaterThanCallEndTimestampError(APIException):
     status_code = 422
     default_detail = 'Start call timestamp can\'t be greater than the end call timestamp'
     default_code = 'timestamp_greater_than_call_end_timestamp_error'
-
-
-class TypeCallMissingError(APIException):
-    status_code = 400
-    default_detail = 'Not allowed to create or update a call record without a field type'
-    default_code = 'type_call_missing_error'
-
-
-class RecordsMissingError(APIException):
-    status_code = 400
-    default_detail = 'Not allowed to create or update a call without a list field records'
-    default_code = 'records_missing_error'
-
-
-class EmptyRecordsError(APIException):
-    status_code = 400
-    default_detail = 'Not allowed to create or update a call with empty records'
-    default_code = 'empty_records_error'

@@ -20,25 +20,19 @@ class PutTestCase(APITestCase):
 
         self.valid_payload = {
             'call_id': 81,
-            'records': [
-                {
-                    'type': 'start',
-                    'timestamp': '2016-02-29T12:00:00Z',
-                    'source': '99988526424',
-                    'destination': '9933468278',
-                },
-            ]
+            'start': {
+                'timestamp': '2016-02-29T12:00:00Z',
+                'source': '99988526424',
+                'destination': '9933468278',
+            },
         }
         self.invalid_payload = {
             'call_id': 82,
-            'records': [
-                {
-                    'type': 'start',
-                    'timestamp': '2016-02-29T12:00:00Z',
-                    'source': '',
-                    'destination': '9933468278',
-                },
-            ]
+            'start': {
+                'timestamp': '2016-02-29T12:00:00Z',
+                'source': '',
+                'destination': '9933468278',
+            },
         }
 
     def test_should_update_call_when_passed_valid_payload(self):

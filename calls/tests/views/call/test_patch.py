@@ -18,20 +18,14 @@ class PatchTestCase(APITestCase):
         CallEnd.objects.create(call=self.first_call, timestamp='2016-02-29T14:00:00Z')
         CallEnd.objects.create(call=self.second_call, timestamp='2017-12-11T15:14:56Z')
         self.valid_payload = {
-            'records': [
-                {
-                    'type': 'end',
-                    'timestamp': '2016-02-29T13:00:00Z',
-                },
-            ]
+            'end': {
+                'timestamp': '2016-02-29T13:00:00Z',
+            }
         }
         self.invalid_payload = {
-            'records': [
-                {
-                    'type': 'start',
-                    'timestamp': '',
-                },
-            ]
+            'start': {
+                'timestamp': '',
+            }
         }
 
     def test_should_modify_a_limited_number_of_fields_when_passed_valid_payload(self):
