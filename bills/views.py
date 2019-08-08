@@ -12,6 +12,9 @@ from bills.exceptions import SubscriberNotPassedError
 
 
 class BillViewSet(viewsets.ViewSet):
+    """
+    retrieve: Return call bill
+    """
     subscriber_param = openapi.Parameter('subscriber', openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True)
     period_param = openapi.Parameter('period', openapi.IN_QUERY, description='mm/yyyy', type=openapi.TYPE_STRING)
 
