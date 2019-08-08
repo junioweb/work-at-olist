@@ -3,6 +3,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from calls.domain.call import Call, CallEnd, CallStart
+
+from bills.domain.bill import Bill
 from bills.serializers import BillSerializer
 
 
@@ -21,7 +23,8 @@ class BillTestCase(APITestCase):
         response = self.client.get(
             reverse('bills:bills') + '?subscriber=99988526423')
         calls = Call.objects.filter(start__source='99988526423')
-        serializer = BillSerializer(calls)
+        bill = Bill(calls)
+        serializer = BillSerializer(bill)
 
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -49,7 +52,8 @@ class BillTestCase(APITestCase):
             reverse('bills:bills') + '?subscriber=99988526423&period=02/2016')
         calls = Call.objects.filter(start__source='99988526423', end__timestamp__month=2,
                                     end__timestamp__year=2016)
-        serializer = BillSerializer(calls)
+        bill = Bill(calls)
+        serializer = BillSerializer(bill)
 
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

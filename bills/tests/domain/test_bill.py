@@ -6,7 +6,7 @@ from bills.domain.bill import Bill
 from bills.exceptions import CallDifferentPeriodsError, CallDifferentSubscribersError
 
 
-class CallStartTestCase(TestCase):
+class BillTestCase(TestCase):
     def setUp(self):
         self.first_call = Call.objects.create(id=74)
         CallStart.objects.create(call=self.first_call, timestamp='2017-12-12T04:57:13Z',
@@ -30,10 +30,6 @@ class CallStartTestCase(TestCase):
 
     def test_should_return_the_total_when_accessed(self):
         self.assertEqual(self.bill.total, 88.20)
-
-    def test_should_get_price_when_passed_call(self):
-        call = self.calls[1]
-        self.assertEqual(self.bill.get_price(call), 86.94)
 
     def test_should_throw_exception_when_create_bill_instance_with_call_different_periods(self):
         call = Call.objects.create(id=77)
